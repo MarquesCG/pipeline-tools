@@ -33,16 +33,16 @@ jobs:
       - name: Checkout homelab
         uses: actions/checkout@v4
         with:
-          repository: tylermarques/homelab-infra
+          repository: owenwaldron/homelab-infra
           ref: main
-          token: ${{ secrets.PKG_PUSH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           path: homelab-infra/
       
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch-name }}
-          token: ${{ secrets.PKG_PUSH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           path: source/
 
       - name: Update Manifests
