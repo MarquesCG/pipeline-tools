@@ -1,0 +1,26 @@
+name: Lint Pre-Commit
+
+on:
+  workflow_dispatch: # Allows manual runs if needed
+
+
+jobs:
+  lint_precommit:
+    runs-on: ubuntu-latest
+    container: python:3.11
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install pre-commit
+        run: pip install -q pre-commit
+
+      - name: Run pre-commit checks
+        run: |
+          if [ -f .pre-commit-config.yaml ]; then
+            pre-commit run --show-diff-on-failure --color=always --all-files
+          else
+            echo ".pre-commit-config.yaml not found, skipping pre-commit checks."
+          fi
+

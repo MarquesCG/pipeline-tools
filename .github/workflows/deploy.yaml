@@ -1,0 +1,58 @@
+name: Update manifests
+
+# This action updates the image tags for the kustomization files within homelab-infra
+
+on:
+  workflow_dispatch: # Allows manual runs if needed
+    inputs:
+      service-name: # The name of the service to update (within homelab)
+        required: true
+        type: string
+      service-env: # The environment to update (dev|production)
+        required: true
+        type: string
+      branch-name: # The name of the branch to pull from
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      service-name: # The name of the service to update (within homelab)
+        required: true
+        type: string
+      service-env: # The environment to update (dev|production)
+        required: true
+        type: string
+      branch-name: # The name of the branch to pull from
+        required: true
+        type: string
+
+jobs:
+  update-manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout homelab
+        uses: actions/checkout@v4
+        with:
+          repository: tylermarques/homelab-infra
+          ref: main
+          token: ${{ secrets.PKG_PUSH_TOKEN }}
+          path: homelab-infra/
+      
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch-name }}
+          token: ${{ secrets.PKG_PUSH_TOKEN }}
+          path: source/
+
+      - name: Update Manifests
+        run: |
+          cd homelab-infra
+          ls -lha
+          apt update && apt install -y yq
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          cp -R ../source/deploy/${{ inputs.service-env }} apps/${{ inputs.service-name }}/${{ inputs.service-env }}
+          yq ea '(.images[] | .newTag) = "'${{ github.sha }}'"' apps/${{ inputs.service-name }}/${{ inputs.service-env }} -i
+          git commit -am 'Push from ${{ github.actor }} to ${{ github.repository }}'
+          git push

@@ -1,0 +1,41 @@
+name: Run pytest
+
+on:
+  workflow_call:
+    inputs:
+      test-dir: # The pytest directory relative to service-project-dir
+        required: true
+        type: string
+      service-project-dir: # The root of the project directory
+        required: false
+        type: string
+
+
+jobs:
+  test_coverage:
+    runs-on: ubuntu-latest
+    container: python:3.11
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Change directory to service project
+        run: cd service/${{ inputs.service-project-dir }}
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install dependencies with Poetry
+        run: poetry install
+
+      - name: Run Pytest with coverage
+        run: |
+          poetry run pytest --cov=service --cov-report=xml --cov-report=html --cov-report=term-missing --junitxml=report.xml ${{ inputs.test-dir }}/
+
+      - name: Upload test results
+        if: always() # Forces run even if previous test step fails
+        uses: actions/upload-artifact@v3
+        with:
+          name: junit-report
+          path: ${{ inputs.service-project-dir }}/report.xml
