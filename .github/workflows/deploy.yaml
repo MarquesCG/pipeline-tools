@@ -50,7 +50,7 @@ jobs:
           cd homelab-infra
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          cp -R ../source/deploy/${{ inputs.service-env }} apps/${{ inputs.service-name }}/${{ inputs.service-env }}
+          cp -R ../source/deploy/${{ inputs.service-env }} apps/${{ inputs.service-name }}
           yq e '.images[].newTag = "'${{ github.sha }}'"' apps/${{ inputs.service-name }}/${{ inputs.service-env }}/kustomization.yaml -i
           git commit -am 'Push from ${{ github.actor }} to ${{ github.repository }}'
           git push
