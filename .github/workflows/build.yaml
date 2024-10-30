@@ -34,12 +34,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push {{ service-name }} Docker Image
+      - name: Build and push ${{ inputs.service-name }} Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: service/{{ context-path }}
+          context: service/${{ inputs.context-path }}
           push: true
-          tags: ghcr.io/marquescg/{{ image-name }}:${{ github.sha }}
+          tags: ghcr.io/marquescg/${{ inputs.image-name }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
