@@ -26,7 +26,7 @@ on:
         required: true
         type: string
     secrets:
-      OWEN_TOKEN:
+      HOMELAB_TOKEN:
         required: true
 
 jobs:
@@ -35,7 +35,7 @@ jobs:
     steps:
       - name: Checkout homelab
         run:
-          git clone https://${{ secrets.OWEN_TOKEN }}@github.com/owenwaldron/homelab-infra-test.git homelab-infra
+          git clone https://${{ secrets.HOMELAB_TOKEN }}@github.com/owenwaldron/homelab-infra-test.git homelab-infra
       
       - name: Checkout code
         uses: actions/checkout@v4
