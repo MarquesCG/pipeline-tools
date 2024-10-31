@@ -28,8 +28,6 @@ on:
     secrets:
       HOMELAB_TOKEN:
         required: true
-      GH_TOKEN: # Github token
-        required: true
 
 jobs:
   update-manifests:
@@ -47,7 +45,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch-name }}
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           path: source/
 
       - name: Update Manifests
