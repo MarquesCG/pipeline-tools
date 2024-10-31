@@ -33,14 +33,19 @@ jobs:
   update-manifests:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout homelab
-        run:
-          git clone https://${{ secrets.HOMELAB_TOKEN }}@github.com/owenwaldron/homelab-infra-test.git homelab-infra
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+            repository: owenwaldron/homelab-infra-test
+            ref: main
+            token: ${{ secrets.HOMELAB_TOKEN }}
+            path: homelab-infra/
       
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch-name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           path: source/
 
       - name: Update Manifests
