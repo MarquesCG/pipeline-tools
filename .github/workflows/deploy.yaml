@@ -25,6 +25,9 @@ on:
       branch-name: # The name of the branch to pull from
         required: true
         type: string
+    secrets:
+      OWEN_TOKEN:
+        required: true
 
 jobs:
   update-manifests:
