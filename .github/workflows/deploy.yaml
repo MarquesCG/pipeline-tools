@@ -28,12 +28,14 @@ on:
     secrets:
       HOMELAB_TOKEN:
         required: true
+      GH_TOKEN: # Github token
+        required: true
 
 jobs:
   update-manifests:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout homelab
         uses: actions/checkout@v4
         with:
             repository: owenwaldron/homelab-infra-test
@@ -45,7 +47,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch-name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
           path: source/
 
       - name: Update Manifests
