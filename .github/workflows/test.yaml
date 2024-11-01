@@ -19,22 +19,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Change directory to service project
-        run: |
-          cd ./service/${{ inputs.service-project-dir }}
-          ls -lha
-
+      
       - name: Install Poetry
         run: pip install poetry
 
       - name: Install dependencies with Poetry
         run: |
-          ls -lha
+          cd ./service/${{ inputs.service-project-dir }}
           poetry install
 
       - name: Run Pytest with coverage
         run: |
+          cd ./service/${{ inputs.service-project-dir }}/${{ inputs.test-dir }}
           poetry run pytest --cov=service --cov-report=xml --cov-report=html --cov-report=term-missing --junitxml=report.xml ${{ inputs.test-dir }}/
 
       - name: Upload test results
