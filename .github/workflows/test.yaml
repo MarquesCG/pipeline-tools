@@ -30,12 +30,13 @@ jobs:
 
       - name: Run Pytest with coverage
         run: |
-          cd ./service/${{ inputs.service-project-dir }}/${{ inputs.test-dir }}
-          poetry run pytest --cov=service --cov-report=xml --cov-report=html --cov-report=term-missing --junitxml=report.xml ${{ inputs.test-dir }}/
+          cd ./service/${{ inputs.service-project-dir }}
+          export PYTHONPATH=$(pwd)
+          poetry run pytest --cov=service --cov-report=xml --cov-report=html --cov-report=term-missing --junitxml=report.xml
 
       - name: Upload test results
         if: always() # Forces run even if previous test step fails
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: junit-report
-          path: ./${{ inputs.service-project-dir }}/report.xml
+          path: ./service/${{ inputs.service-project-dir }}/report.xml
