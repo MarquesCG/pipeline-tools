@@ -21,13 +21,17 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Change directory to service project
-        run: cd ./service/${{ inputs.service-project-dir }}
+        run: |
+          cd ./service/${{ inputs.service-project-dir }}
+          ls -lha
 
       - name: Install Poetry
         run: pip install poetry
 
       - name: Install dependencies with Poetry
-        run: poetry install
+        run: |
+          ls -lha
+          poetry install
 
       - name: Run Pytest with coverage
         run: |

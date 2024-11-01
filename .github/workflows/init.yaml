@@ -22,14 +22,14 @@ jobs:
         with:
           repository: tylermarques/homelab-infra
           ref: main
-          token: ${{ secrets.PKG_PUSH_TOKEN }}
+          token: ${{ secrets.HOMELAB_TOKEN }}
           path: homelab-infra/
       
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch-name }}
-          token: ${{ secrets.PKG_PUSH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           path: main/
 
       - name: Copy Manifests
