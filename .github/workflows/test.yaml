@@ -14,7 +14,7 @@ on:
 jobs:
   test_coverage:
     runs-on: ubuntu-latest
-    container: python:3.11
+    container: python:3.12
 
     steps:
       - name: Checkout code
