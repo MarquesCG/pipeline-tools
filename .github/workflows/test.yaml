@@ -3,9 +3,6 @@ name: Run pytest
 on:
   workflow_call:
     inputs:
-      test-dir: # The pytest directory relative to service-project-dir
-        required: true
-        type: string
       service-project-dir: # The root of the project directory
         required: false
         type: string
