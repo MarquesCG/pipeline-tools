@@ -33,13 +33,14 @@ jobs:
         with:
           ref: ${{ inputs.branch-name }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          path: main/
+          path: source/
 
       - name: Copy Manifests
         run: |
           cd homelab-infra
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          cp -R ../main/deploy apps/${{ inputs.service-name }}
+          cp -R ../source/deploy apps/${{ inputs.service-name }}
+          git add .
           git commit -am 'Initializing service ${{ inputs.service-name }} from ${{ github.actor }}'
           git push
