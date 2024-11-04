@@ -3,7 +3,7 @@ name: Initialize Microservice
 # This copies all manifests to homelab infra
 
 on:
-  workflow_dispatch: # Allows manual runs if needed
+  workflow_call: # Allows manual runs if needed
     inputs:
       service-name: # The name of the service to update (within homelab)
         required: true
