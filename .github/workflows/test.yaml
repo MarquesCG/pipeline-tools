@@ -9,6 +9,19 @@ on:
       service-project-dir: # The root of the project directory
         required: false
         type: string
+      uses-mongo: # (default: false) Whether or not to launch a mongodb instance
+        required: false
+        type: boolean
+        default: false
+      mongo-version: # (default: latest) Mongodb port
+        required: false
+        type: string
+        default: latest
+      mongo-port: # (default: 27017) Mongodb port
+        required: false
+        type: number
+        default: 27017
+      
 
 
 jobs:
@@ -28,6 +41,13 @@ jobs:
           cd ./service/${{ inputs.service-project-dir }}
           poetry install
           poetry add pytest-cov
+      
+      - name: Start MongoDB
+        if: ${{ inputs.uses-mongo }}
+        uses: supercharge/mongodb-github-action@1.11.0
+        with:
+          mongodb-version: ${{ inputs.mongo-version }}
+          mongodb-port: ${{ inputs.mongo-port }}
 
       - name: Run Pytest with coverage
         run: |
