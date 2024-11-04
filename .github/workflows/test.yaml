@@ -3,6 +3,9 @@ name: Run pytest
 on:
   workflow_call:
     inputs:
+      test-dir: # The pytest directory relative to service-project-dir
+        required: true
+        type: string
       service-project-dir: # The root of the project directory
         required: false
         type: string
@@ -48,7 +51,7 @@ jobs:
 
       - name: Run Pytest with coverage
         run: |
-          cd ./service/${{ inputs.service-project-dir }}
+          cd ./service/${{ inputs.service-project-dir }}/${{ inputs.test-dir }}
           export PYTHONPATH=$(pwd)
           poetry run pytest --cov=service --cov-report=xml --cov-report=html --cov-report=term-missing --junitxml=report.xml
 
