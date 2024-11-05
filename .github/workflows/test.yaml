@@ -34,11 +34,6 @@ jobs:
         image: ${{ inputs.uses-mongo && format('mongo:{0}', inputs.mongo-version) }}
         ports:
           - ${{ format('{0}:{1}', inputs.mongo-port, inputs.mongo-port) }}
-        options: >-
-          --health-cmd mongo
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
       - name: Checkout code
