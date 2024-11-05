@@ -43,16 +43,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      
-      - name: Install Poetry
-        run: pip install poetry
 
-      - name: Install dependencies with Poetry
-        run: |
-          cd ./service/${{ inputs.service-project-dir }}
-          poetry install
-          poetry add pytest-cov
-      
       - name: Install motor
         if: ${{ inputs.uses-mongo }}
         run: pip install motor  # Install pymongo to test the connection
@@ -62,9 +53,18 @@ jobs:
         run: |
           python -c "
           from motor.motor_asyncio import AsyncIOMotorClient
-          client = AsyncIOMotorClient("mongodb://localhost:${{ inputs.mongo-port }}")
+          client = AsyncIOMotorClient('mongodb://localhost:${{ inputs.mongo-port }}')
           await client.admin.command('ping')
           "
+      
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install dependencies with Poetry
+        run: |
+          cd ./service/${{ inputs.service-project-dir }}
+          poetry install
+          poetry add pytest-cov
 
       - name: Run Pytest with coverage
         run: |
