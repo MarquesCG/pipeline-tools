@@ -29,6 +29,17 @@ jobs:
     runs-on: ubuntu-latest
     container: python:3.12
 
+    services:
+      mongodb:
+        image: ${{ inputs.uses-mongo && format('mongo:{0}', inputs.mongo-version) }}
+        ports:
+          - ${{ format('{0}:{1}', inputs.mongo-port, inputs.mongo-port) }}
+        options: >-
+          --health-cmd mongo
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -42,12 +53,20 @@ jobs:
           poetry install
           poetry add pytest-cov
       
-      - name: Start MongoDB
+      - name: Install mongosh
         if: ${{ inputs.uses-mongo }}
-        uses: supercharge/mongodb-github-action@1.11.0
-        with:
-          mongodb-version: ${{ inputs.mongo-version }}
-          mongodb-port: ${{ inputs.mongo-port }}
+        run: |
+          sudo apt-get install gnupg
+          wget -qO- https://www.mongodb.org/static/pgp/server-8.0.asc | sudo tee /etc/apt/trusted.gpg.d/server-8.0.asc
+          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/8.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+          sudo apt-get update
+          sudo apt-get install -y mongodb-mongosh
+          mongosh --version
+  
+      - name: Initalize MongoDB
+        if: ${{ inputs.uses-mongo }}
+        run: |
+          mongosh --host localhost:${{ inputs.mongo-port }}
 
       - name: Run Pytest with coverage
         run: |
