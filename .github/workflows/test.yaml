@@ -47,21 +47,6 @@ jobs:
           cd ./service/${{ inputs.service-project-dir }}
           poetry install
           poetry add pytest-cov
-      
-      - name: Install mongosh
-        if: ${{ inputs.uses-mongo }}
-        run: |
-          sudo apt-get install gnupg
-          wget -qO- https://www.mongodb.org/static/pgp/server-8.0.asc | sudo tee /etc/apt/trusted.gpg.d/server-8.0.asc
-          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/8.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
-          sudo apt-get update
-          sudo apt-get install -y mongodb-mongosh
-          mongosh --version
-  
-      - name: Initalize MongoDB
-        if: ${{ inputs.uses-mongo }}
-        run: |
-          mongosh --host localhost:${{ inputs.mongo-port }}
 
       - name: Run Pytest with coverage
         run: |
