@@ -60,9 +60,9 @@ jobs:
       - name: Test mongodb connection
         if: ${{ inputs.uses-mongo }}
         run: |
-          python-c "
+          python -c "
           from motor.motor_asyncio import AsyncIOMotorClient
-          client = AsyncIOMotorClient("mongodb://localhost:27017")
+          client = AsyncIOMotorClient("mongodb://localhost:${{ inputs.mongo-port }}")
           await client.admin.command('ping')
           "
 
