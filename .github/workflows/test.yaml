@@ -52,11 +52,19 @@ jobs:
           cd ./service/${{ inputs.service-project-dir }}
           poetry install
           poetry add pytest-cov
+      
+      - name: Install motor
+        if: ${{ inputs.uses-mongo }}
+        run: pip install motor  # Install pymongo to test the connection
 
-      - name: Initalize MongoDB
+      - name: Test mongodb connection
         if: ${{ inputs.uses-mongo }}
         run: |
-          mongosh --host localhost:${{ inputs.mongo-port }}
+          python-c "
+          from motor.motor_asyncio import AsyncIOMotorClient
+          client = AsyncIOMotorClient("mongodb://localhost:27017")
+          await client.admin.command('ping')
+          "
 
       - name: Run Pytest with coverage
         run: |
