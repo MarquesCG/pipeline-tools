@@ -51,11 +51,11 @@ jobs:
       - name: Test mongodb connection
         if: ${{ inputs.uses-mongo }}
         run: |
-          python -m asyncio -c "
+          python -m asyncio << EOF
           from motor.motor_asyncio import AsyncIOMotorClient
           client = AsyncIOMotorClient('mongodb://localhost:${{ inputs.mongo-port }}')
           await client.admin.command('ping')
-          "
+          EOF
       
       - name: Install Poetry
         run: pip install poetry
