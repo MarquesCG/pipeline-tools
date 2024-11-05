@@ -67,6 +67,8 @@ jobs:
           poetry add pytest-cov
 
       - name: Run Pytest with coverage
+        env:
+          MONGODB_URI: mongodb://mongodb:${{ inputs.mongo-port }}
         run: |
           cd ./service/${{ inputs.service-project-dir }}/${{ inputs.test-dir }}
           export PYTHONPATH=$(pwd)
