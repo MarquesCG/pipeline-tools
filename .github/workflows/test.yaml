@@ -46,12 +46,12 @@ jobs:
 
       - name: Install motor
         if: ${{ inputs.uses-mongo }}
-        run: pip install motor  # Install pymongo to test the connection
+        run: pip install motor
 
       - name: Test mongodb connection
         if: ${{ inputs.uses-mongo }}
         run: |
-          python -c "
+          python -m asyncio -c "
           from motor.motor_asyncio import AsyncIOMotorClient
           client = AsyncIOMotorClient('mongodb://localhost:${{ inputs.mongo-port }}')
           await client.admin.command('ping')
