@@ -21,6 +21,10 @@ on:
         required: false
         type: number
         default: 27017
+      mongo-env-var: # (default: MONGODB_URI) The enviroment variable for the Mongo URL
+        required: false
+        type: string
+        default: MONGODB_URI
       
 
 
@@ -68,9 +72,9 @@ jobs:
 
       - name: Run Pytest with coverage
         env:
-          MONGODB_URI: mongodb://mongodb:${{ inputs.mongo-port }}
+          ${{ inputs.mongo-env-var || 'MONGODB_URI' }}: mongodb://mongodb:${{ inputs.mongo-port }}
         run: |
-          cd ./service/${{ inputs.service-project-dir }}/${{ inputs.test-dir }}
+          cd ./service/${{ inputs.test-dir }}
           export PYTHONPATH=$(pwd)
           poetry run pytest --cov=service --cov-report=xml --cov-report=html --cov-report=term-missing --junitxml=report.xml
 
@@ -79,4 +83,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: junit-report
-          path: ./service/${{ inputs.service-project-dir }}/report.xml
+          path: ./service/${{ inputs.test-dir }}/report.xml
