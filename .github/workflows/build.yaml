@@ -9,7 +9,7 @@ on:
       image-name: # The name of the image to build
         required: true
         type: string
-      context-path: # The path of 
+      context-path: # The Dockerfile context within the repo
         required: false
         type: string
       service-name: # The name of the service (for logging)
@@ -43,7 +43,7 @@ jobs:
       - name: Build and push ${{ inputs.service-name }} Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: service/${{ inputs.context-path }}
+          context: ${{ inputs.context-path }}
           push: true
           tags: ghcr.io/marquescg/${{ inputs.image-name }}:${{ github.sha }}
           cache-from: type=gha

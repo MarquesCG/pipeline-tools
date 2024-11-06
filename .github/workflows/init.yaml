@@ -8,6 +8,9 @@ on:
       service-name: # The name of the service to update (within homelab)
         required: true
         type: string
+      manifest-dir: # The directory that stores the manifests
+        required: true
+        type: string
       branch-name: # (default: main) The name of the branch to pull from
         required: false
         default: main
@@ -40,7 +43,7 @@ jobs:
           cd homelab-infra
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          cp -R ../source/deploy apps/${{ inputs.service-name }}
+          cp -R ../source/${{ inputs.manifest-dir }} apps/${{ inputs.service-name }}
           git add .
           git commit -am 'Initializing service ${{ inputs.service-name }} from ${{ github.actor }}'
           git push

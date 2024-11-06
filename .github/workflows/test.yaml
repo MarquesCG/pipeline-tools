@@ -3,7 +3,7 @@ name: Run pytest
 on:
   workflow_call:
     inputs:
-      test-dir: # The pytest directory relative to service-project-dir
+      test-dir: # The pytest directory within the project
         required: true
         type: string
       service-project-dir: # The root of the project directory
@@ -74,7 +74,7 @@ jobs:
         env:
           ${{ inputs.mongo-env-var || 'MONGODB_URI' }}: mongodb://mongodb:${{ inputs.mongo-port }}
         run: |
-          cd ./service/${{ inputs.test-dir }}
+          cd ./${{ inputs.test-dir }}
           export PYTHONPATH=$(pwd)
           poetry run pytest --cov=service --cov-report=xml --cov-report=html --cov-report=term-missing --junitxml=report.xml
 
@@ -83,4 +83,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: junit-report
-          path: ./service/${{ inputs.test-dir }}/report.xml
+          path: ./${{ inputs.test-dir }}/report.xml

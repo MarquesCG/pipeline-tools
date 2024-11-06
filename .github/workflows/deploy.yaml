@@ -3,28 +3,21 @@ name: Update manifests
 # This action updates the image tags for the kustomization files within homelab-infra
 
 on:
-  workflow_dispatch: # Allows manual runs if needed
-    inputs:
-      service-name: # The name of the service to update (within homelab)
-        required: true
-        type: string
-      service-env: # The environment to update (dev|production)
-        required: true
-        type: string
-      branch-name: # The name of the branch to pull from
-        required: true
-        type: string
   workflow_call:
     inputs:
       service-name: # The name of the service to update (within homelab)
         required: true
         type: string
-      service-env: # The environment to update (dev|production)
+      deploy-env: # The environment to update (dev|production)
         required: true
         type: string
       branch-name: # The name of the branch to pull from
         required: true
         type: string
+      deploy-src: # The path do the deployment files
+        required: false
+        type: string
+        default: deploy
     secrets:
       HOMELAB_TOKEN:
         required: true
@@ -53,8 +46,8 @@ jobs:
           cd homelab-infra
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          cp -R ../source/deploy/${{ inputs.service-env }} apps/${{ inputs.service-name }}
-          yq e '.images[].newTag = "'${{ github.sha }}'"' apps/${{ inputs.service-name }}/${{ inputs.service-env }}/kustomization.yaml -i
+          cp -R ../source/${{ inputs.deploy-src }}/${{ inputs.deploy-env }} apps/${{ inputs.service-name }}
+          yq e '.images[].newTag = "'${{ github.sha }}'"' apps/${{ inputs.service-name }}/${{ inputs.deploy-env }}/kustomization.yaml -i
           git add .
           git commit -am 'Push from ${{ github.actor }} to ${{ github.repository }}'
           git push
