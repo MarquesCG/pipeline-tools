@@ -29,7 +29,7 @@ jobs:
       - name: Checkout homelab
         uses: actions/checkout@v4
         with:
-            repository: owenwaldron/homelab-infra-test
+            repository: tylermarques/homelab-infra
             ref: main
             token: ${{ secrets.HOMELAB_TOKEN }}
             path: homelab-infra/
