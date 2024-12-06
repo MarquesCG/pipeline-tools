@@ -39,6 +39,7 @@ Copies all the manifests for a service into the tylermarques/homelab-infra repo.
 
 - `service-name`: The name of the service to initialize
 - `manifest-dir`: The directory within the repo that stores the manfiests to be copied over.
+- `manifest-repo`: The name of the manifest directory to update *(Default: tylermarques/homelab-infra)*
 - `branch-name`: The name of the branch to pull from *(Default: main)*
 
 
@@ -49,6 +50,7 @@ Updates the manifests in the tylermarques/homelab-infra repo. This action requir
 - `service-name`: The name of the service within homelab-infra
 - `deploy-env`: The name of the environemnt to update (dev|production)
 - `branch-name`: The name of the branch to pull from
+- `manifest-repo`: The name of the manifest directory to update *(Default: tylermarques/homelab-infra)*
 - `deploy-src`: The path to the deploy directory that contains all environments *(Default: deploy)*
 
 

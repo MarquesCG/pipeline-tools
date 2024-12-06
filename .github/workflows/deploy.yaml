@@ -14,6 +14,10 @@ on:
       branch-name: # The name of the branch to pull from
         required: true
         type: string
+      manifest-repo: # The github repo that houses the manifests
+        required: false
+        type: string
+        default: tylermarques/homelab-infra
       deploy-src: # The path do the deployment files
         required: false
         type: string
@@ -29,7 +33,7 @@ jobs:
       - name: Checkout homelab
         uses: actions/checkout@v4
         with:
-            repository: tylermarques/homelab-infra
+            repository: ${{ inputs.manifest-repo }}
             ref: main
             token: ${{ secrets.HOMELAB_TOKEN }}
             path: homelab-infra/
