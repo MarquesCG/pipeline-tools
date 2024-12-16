@@ -1,0 +1,54 @@
+name: Overwrite Manifests
+
+# Updates all of the manifests in homelab-infra to reflect the state of a specified branch
+
+on:
+  workflow_call: # Allows manual runs if needed
+    inputs:
+      service-name: # The name of the service to update (within homelab)
+        required: true
+        type: string
+      manifest-dir: # The directory that stores the manifests
+        required: true
+        type: string
+      manifest-repo: # The github repo that houses the manifests
+        required: false
+        type: string
+        default: tylermarques/homelab-infra
+      branch-name: # (default: main) The name of the branch to pull from
+        required: false
+        default: main
+        type: string
+    secrets:
+      HOMELAB_TOKEN:
+        required: true
+
+jobs:
+  update-manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout homelab
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.manifest-repo }}
+          ref: main
+          token: ${{ secrets.HOMELAB_TOKEN }}
+          path: homelab-infra/
+      
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch-name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/
+
+      - name: Copy Manifests
+        run: |
+          cd homelab-infra
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          rm -r ./apps/${{ inputs.service-name }}
+          cp -R ../source/${{ inputs.manifest-dir }} apps/${{ inputs.service-name }}
+          git add .
+          git commit -am 'Initializing service ${{ inputs.service-name }} from ${{ github.actor }}'
+          git push

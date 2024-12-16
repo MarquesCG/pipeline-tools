@@ -12,6 +12,8 @@ This repository houses several reusable github actions. The included actions are
       uses-mongo: %variables as needed%
 ```
 
+Note that many actions require the the `HOMELAB_TOKEN` is defined in the context of the repository that uses this action. Contact Tyler to arrange this. Note that an organization level secret does not work, as the GitHub free tier does not allows organization level secrets within private repositories.
+
 ## Build
 
 Build a docker image within the specified context and pushes it to the MarquesCG packages registry. The tag of the image is automatically the `github.sha` of the commit that triggered the workflow.
@@ -35,7 +37,7 @@ Uses poetry runs pytest in a specific directory. Allows a MongoDB to be created 
 
 ## Init
 
-Copies all the manifests for a service into the tylermarques/homelab-infra repo. This action should be run once, and later updates to the manifests should use the [Deploy action](#deploy). **This action requires that the HOMELAB_TOKEN secret is defined. Contact Tyler to arrange this.**
+Copies all the manifests for a service into the tylermarques/homelab-infra repo. This action should be run once, and later updates to the manifests should use the [Deploy action](#deploy). This is a less powerful version of the [Overwrite action](#overwrite), which deletes any existeing manfiests. **This action requires that the HOMELAB_TOKEN secret is defined. Contact Tyler to arrange this.**
 
 - `service-name`: The name of the service to initialize
 - `manifest-dir`: The directory within the repo that stores the manfiests to be copied over.
@@ -53,4 +55,11 @@ Updates the manifests in the tylermarques/homelab-infra repo. This action requir
 - `manifest-repo`: The name of the manifest directory to update *(Default: tylermarques/homelab-infra)*
 - `deploy-src`: The path to the deploy directory that contains all environments *(Default: deploy)*
 
+## Overwrite
 
+Overwrite all the manifests for a service into the tylermarques/homelab-infra repo. This action does the same thing as init, but removes any preivously exisitng manifests. This action should be used very carfully. **This action requires that the HOMELAB_TOKEN secret is defined. Contact Tyler to arrange this.**
+
+- `service-name`: The name of the service to overwrite
+- `manifest-dir`: The directory within the repo that stores the manfiests to be copied over.
+- `manifest-repo`: The name of the manifest directory to update *(Default: tylermarques/homelab-infra)*
+- `branch-name`: The name of the branch to pull from *(Default: main)*
