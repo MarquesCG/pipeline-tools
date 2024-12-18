@@ -50,5 +50,5 @@ jobs:
           rm -r ./apps/${{ inputs.service-name }}
           cp -R ../source/${{ inputs.manifest-dir }} apps/${{ inputs.service-name }}
           git add .
-          git commit -am 'Initializing service ${{ inputs.service-name }} from ${{ github.actor }}'
+          git commit -am 'Syncing base files for ${{ inputs.service-name }} by ${{ github.actor }}'
           git push

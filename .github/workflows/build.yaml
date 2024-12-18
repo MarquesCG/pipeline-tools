@@ -18,6 +18,10 @@ on:
       build-args: # Optional arguments for the build step
         required: false
         type: string
+      ghrc-oranization: # Optional organization to push image to (default: marquescg)
+        required: false
+        default: marquescg
+        type: string
 
 jobs:
   build:
@@ -49,7 +53,7 @@ jobs:
           context: ${{ inputs.context-path }}
           push: true
           build-args: ${{ inputs.build-args }}
-          tags: ghcr.io/marquescg/${{ inputs.image-name }}:${{ github.sha }}
+          tags: ghcr.io/${{ inputs.ghrc-oranization }}/${{ inputs.image-name }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

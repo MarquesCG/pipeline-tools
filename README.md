@@ -22,6 +22,7 @@ Build a docker image within the specified context and pushes it to the MarquesCG
 - `context-path`: The Dockerfile context within the repo
 - `service-name`: The name of the service for logging purposes
 - `build-args`: A list or arguments to provide to the build step
+- `ghrc-oranization`: Organization to push image to *(Default: marquescg)*
 
 
 ## Test
